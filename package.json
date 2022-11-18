@@ -1,0 +1,16 @@
+{
+    "id": "filter-popup",
+    "name": "筛选 菜单 筛选菜单 上拉筛选 ",
+    "version": "1.0.4",
+    "description": "筛选菜单，支持单选和多选 ， 选择后的数据通过.sync双向绑定,全端支持  导入即用",
+    "keywords": [
+        "筛选",
+        "菜单",
+        "筛选菜单",
+        "上拉筛选"
+    ],
+    "dependencies": {
+        "@dcloudio/uni-ui": "^1.4.23",
+        "axios": "^1.1.3"
+    }
+}
