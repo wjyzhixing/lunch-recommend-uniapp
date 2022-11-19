@@ -14,7 +14,13 @@
 			<view v-for="item in list">
 				<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
 					@click="onClick(item)">
-					<text class="uni-body">次数:{{ item.times }}次</text>
+					<view class="uni-list">
+						<text class="uni-body">次数:{{ item.times }}次</text>
+						<view>
+							<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
+							<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
+						</view>
+					</view>
 				</uni-card>
 			</view>
 			<view v-show="showOther">
@@ -26,6 +32,25 @@
 			<!-- <uni-list-item :title="item.food" :note="item.whichTime" :rightText="item.times" /> -->
 			<!-- </uni-list> -->
 		</uni-section>
+		<uni-drawer ref="showRight" mode="right" :mask-click="true" @change="change($event,'showRight')">
+			<uni-section title="打标签" type="line">
+			<view class="scroll-view">
+				<scroll-view class="scroll-view-box" scroll-y="true">
+					<uni-forms ref="valiForm" :rules="rules" :modelValue="baseFormData">
+						<uni-forms-item label="标签" required name="ifExpensive">
+							<uni-data-checkbox v-model="baseFormData.ifExpensive" :localdata="ifExpensiveData" />
+						</uni-forms-item>
+					</uni-forms>
+					<view class="button-group">
+						<button type="primary" class="btn-change" @click="submit('valiForm','showRight')">提交</button>
+					</view>
+					<!-- 					<view class="close">
+						<button @click="closeDrawer('showRight')"><text class="word-btn-white">关闭Drawer</text></button>
+					</view> -->
+				</scroll-view>
+			</view>
+			</uni-section>
+		</uni-drawer>
 	</view>
 </template>
 
@@ -37,6 +62,8 @@
 		},
 		data() {
 			return {
+				tagId: null,
+				showRight: false,
 				list: [
 
 				],
@@ -109,20 +136,42 @@
 				}, //选中的表单
 				popup: {
 					filter: false
-				}
+				},
+				baseFormData: {
+					ifExpensive: '',
+				},
+				ifExpensiveData: [{
+					text: '很便宜',
+					value: '很便宜'
+				}, {
+					text: '贵但可接受',
+					value: '贵但可接受'
+				}, {
+					text: '便宜不想吃',
+					value: '便宜不想吃'
+				}, {
+					text: '太贵',
+					value: '太贵'
+				}, {
+					text: '下次一定',
+					value: '下次一定'
+				}],
+				// 校验规则
+				rules: {
+					ifExpensive: {
+						rules: [{
+							required: true,
+							errorMessage: '标签不能为空'
+						}]
+					},
+				},
 			};
 		},
 		onLoad() {
 			console.log(sessionStorage.getItem('user'))
 		},
 		onShow() {
-			const result = {
-				food: this.searchValue,
-				whichTime: this.filterForm?.whichTime?.toString() || undefined,
-				love: this.filterForm?.love?.toString() || undefined,
-				username: sessionStorage.getItem('user')
-			}
-			this.getMyWifeFood(result)
+			this.init();
 		},
 		computed: {
 			showOther() {
@@ -130,6 +179,15 @@
 			}
 		},
 		methods: {
+			init() {
+				const result = {
+					food: this.searchValue,
+					whichTime: this.filterForm?.whichTime?.toString() || undefined,
+					love: this.filterForm?.love?.toString() || undefined,
+					username: sessionStorage.getItem('user')
+				}
+				this.getMyWifeFood(result)	
+			},
 			subFinsh(e) {
 				console.log(e)
 				this.popup.filter = false;
@@ -239,13 +297,104 @@
 				let url = '/pages/tabbar/tabbar-4/tabbar-4'
 				console.log(this.$navTo)
 				this.$navTo.togo(url, e)
+			},
+			jumpSign(e, item) {
+				console.log(item)
+				this.$refs[e].open()
+				this.tagId = item._id,
+				this.baseFormData.ifExpensive = item?.ifExpensive || undefined
+			},
+			confirm() {},
+			// 打开窗口
+			// 关闭窗口
+			closeDrawer(e) {
+				this.$refs[e].close()
+			},
+			// 抽屉状态发生变化触发
+			change(e, type) {
+				this[type] = e
+			},
+			submit(ref,ref2) {
+				this.$refs[ref].validate().then(res => {
+					console.log('success', res,this.tagId);
+					const data = {
+						id: this.tagId,
+						ifExpensive: res.ifExpensive,
+					}
+					this.axios.post('/api/addTagIfExpensive', this.qs.stringify(data), {
+							headers: {
+								'token': sessionStorage.getItem('token')
+							}
+						})
+						.then(function(res) {
+							if (res?.data?.code !== 0 && res?.data) {
+								uni.showToast({
+									title: `${res?.data?.message}`,
+									icon: 'error'
+								})
+							} else {
+								uni.showToast({
+									title: '打标签成功',
+								})
+								this.init()
+								setTimeout(() => {
+									this.closeDrawer(ref2)
+								},1000)
+							}
+							//控制台打印请求成功时返回的数据
+							//bind(this)可以不用
+						}.bind(this))
+						.catch(function(err) {
+							if (err.response) {
+								console.log(err.response)
+								//控制台打印错误返回的内容
+							}
+							//bind(this)可以不用
+						}.bind(this))
+				}).catch(err => {
+					console.log('err', err);
+				})
+			},
+			deleteSign(item) {
+				console.log(item)
+				this.axios.post('/api/deleteTag', this.qs.stringify({id: item._id}), {
+						headers: {
+							'token': sessionStorage.getItem('token')
+						}
+					})
+					.then(function(res) {
+						if (res?.data?.code !== 0 && res?.data) {
+							uni.showToast({
+								title: `${res?.data?.message}`,
+								icon: 'error'
+							})
+						} else {
+							uni.showToast({
+								title: '删除标签成功',
+							})
+							setTimeout(() => {
+								this.init()
+							},1000)
+						}
+						//控制台打印请求成功时返回的数据
+						//bind(this)可以不用
+					}.bind(this))
+					.catch(function(err) {
+						if (err.response) {
+							console.log(err.response)
+							//控制台打印错误返回的内容
+						}
+						//bind(this)可以不用
+					}.bind(this))
 			}
 		},
+		// app端拦截返回事件 ，仅app端生效
 		onBackPress() {
-			// #ifdef APP-PLUS
-			plus.key.hideSoftKeybord();
-			// #endif
-		},
+			if (this.showRight) {
+				this.$refs.showRight.close()
+				return true
+			}
+		}
 
 	}
 </script>
@@ -268,7 +417,7 @@
 		background-color: #0066ff;
 		color: #fff;
 	}
-	
+
 	.noData {
 		height: 200upx;
 		border: 1px solid #efefef;
@@ -278,4 +427,26 @@
 		display: flex;
 		align-items: center;
 	}
+
+	.uni-list {
+		display: flex;
+		justify-content: space-between;
+
+		.uni-sign {
+			color: blueviolet;
+		}
+		
+		.uni-delSign {
+			margin-left: 20upx;
+			color: blueviolet;
+		}
+	}
+	
+	.scroll-view {
+		flex:1;
+		align-items: center;
+		justify-content: start;
+		margin: 10upx 20upx 0upx;
+	}
+
 </style>
