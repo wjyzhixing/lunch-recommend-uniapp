@@ -47,6 +47,19 @@
 		</view>
 		<view v-if="log">
 			<view class="login">您好，{{ user }}</view>
+			<view class="my-all">整体展示</view>
+			<view class="my-all">
+				<uni-tag class="my-tag" text="早餐" type="primary" @click="bkfilter('早餐')" />
+				<uni-tag class="my-tag" text="午餐" type="primary" @click="bkfilter('午餐')" />
+				<uni-tag class="my-tag" text="晚餐" type="primary" @click="bkfilter('晚餐')" />
+				<uni-tag class="my-tag" text="全部" type="primary" @click="bkfilter(null)" />
+			</view>
+			<view class="todayCar">
+				<qiun-data-charts class="charts" type="pie" :opts="opts" :chartData="chartData" />
+			</view>
+			<!-- <view>
+				<button @click="share">点我微信分享</button>
+			</view> -->
 			<view class="logout">
 				<button class="logout-btn" type="primary" @click="logout">退出登录</button>
 			</view>
@@ -61,6 +74,7 @@ export default {
 			login: true,
 			register: false,
 			user: uni.getStorageSync("user"),
+			list: [],
 			// 校验表单数据
 			valiFormData: {
 				username: '',
@@ -85,6 +99,37 @@ export default {
 					}]
 				}
 			},
+			opts: {
+				color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				padding: [5, 5, 5, 5],
+				extra: {
+					pie: {
+						activeOpacity: 0.5,
+						activeRadius: 10,
+						offsetAngle: 0,
+						labelWidth: 15,
+						border: false,
+						borderWidth: 3,
+						borderColor: "#FFFFFF"
+					}
+				},
+				legend: {
+					"show": true,
+					"position": "right",
+					"float": "center",
+					"padding": 5,
+					"margin": 5,
+					"backgroundColor": "rgba(0,0,0,0)",
+					"borderColor": "rgba(0,0,0,0)",
+					"borderWidth": 0,
+					// "fontSize": 12,
+					"fontColor": "#999999",
+					"lineHeight": 4,
+					"hiddenColor": "#CECECE",
+					"itemGap": 1,
+				},
+			},
+			chartData: {},
 		}
 	},
 	computed: {
@@ -97,7 +142,16 @@ export default {
 			this.login = false;
 		}
 	},
-	onReady() { },
+	// onReady() {
+	// 	if (uni.getStorageSync("user") && uni.getStorageSync("token")) {
+	// 		this.getServerData();
+	// 	}
+	// },
+	onShow() {
+		if (uni.getStorageSync("user") && uni.getStorageSync("token")) {
+			this.getServerData();
+		}
+	},
 	methods: {
 		submit(ref) {
 			if (this.login) {
@@ -156,6 +210,7 @@ export default {
 								uni.setStorageSync('token', res?.data?.data?.token);
 								uni.setStorageSync('user', result?.username);
 								this.user = result?.username;
+								this.getServerData(result?.username);
 								uni.showToast({
 									title: `登录成功`
 								})
@@ -249,6 +304,7 @@ export default {
 		logout() {
 			// uni.Stro
 			// sessionStorage.clear();
+			this.chartData = {};
 			uni.setStorageSync("user", undefined);
 			uni.setStorageSync("token", undefined);
 			this.login = true;
@@ -260,8 +316,112 @@ export default {
 		loginJump() {
 			this.register = false;
 			this.login = true;
+		},
+		getServerData(user) {
+			//模拟从服务器获取数据时的延时
+			const result = {
+				food: '',
+				username: user || uni.getStorageSync("user")
+			}
+			this.getMyWifeFood(result)
+		},
+		bkfilter(time) {
+			let res = []
+			if (time) {
+				res = this.list.filter(i => {
+					if (i.whichTime === time || i.whichTime === '全部') {
+						return i
+					}
+				}).map(i => {
+					return { name: i.food, value: i.times }
+				})
+				console.log(res)
+			} else {
+				res = this.list.map(i => {
+					return {
+						name: i.food,
+						value: i.times
+					}
+				})
+			}
+			res = res.filter(i => i.value !== 0)
+			const chart = {
+				series: [
+					{
+						data: res
+					}
+				]
+			}
+			console.log(chart)
+			this.chartData = JSON.parse(JSON.stringify(chart));
+		},
+		getMyWifeFood(result) {
+			const host = getApp().globalData.host;
+			uni.request({
+				url: host + "/getMyWifeFood",
+				method: 'POST',
+				data: result,
+				header: {
+					'token': uni.getStorageSync("token")
+				},
+				success: (res) => {
+					console.log(res.data)
+					if (res?.data?.code !== 0 && res?.data) {
+						uni.showToast({
+							title: `${res?.data?.message}`,
+							icon: 'none'
+						})
+					} else {
+						const list = res?.data?.data
+						let temp = list.map(i => {
+							return {
+								name: i.food,
+								value: i.times
+							}
+						})
+						this.list = list;
+						temp = temp.filter(i => i.value !== 0)
+						const chart = {
+							series: [
+								{
+									data: temp
+								}
+							]
+						}
+						console.log(chart)
+						this.chartData = JSON.parse(JSON.stringify(chart));
+					}
+				},
+				fall: err => {
+					if (err.response) {
+						console.log(err.response)
+						this.list = [];
+						uni.showToast({
+							title: `${err?.response?.data?.message} 请检查登录信息`,
+							icon: 'none'
+						})
+						//控制台打印错误返回的内容
+					}
+				}
+			})
+		},
+		share() {
+			uni.share({
+				provider: "weixin",
+				scene: "WXSceneSession",
+				type: 0,
+				href: "https://cn.bing.com/images/search?q=%e5%a5%b6%e8%8c%b6&form=HDRSC2&first=1&tsc=ImageHoverTitle",    // 分享跳转的链接
+				title: "微信分享",    // 分享标题
+				summary: "微信分享示例",    // 分享内容文字
+				imageUrl: "https://tse4-mm.cn.bing.net/th/id/OIP-C.4dMFZeNZTSghjY1RpuOqlgHaLH?w=182&h=273&c=7&r=0&o=5&dpr=1.25&pid=1.7",    //分享封面图片
+				success: function (res) {
+					// 此处是调起微信分享成功的回调
+				},
+				fail: function (err) {
+					// 此处是调起微信分享失败的回调
+				}
+			});
 		}
-
 	},
 }
 </script>
@@ -303,5 +463,18 @@ export default {
 .register-vbtn {
 	font-size: 40upx;
 	color: blueviolet;
+}
+
+.my-all {
+	margin: 20upx;
+	color: blueviolet;
+}
+
+.my-tag {
+	margin-right: 10upx;
+}
+
+.todayCar {
+	height: 600upx;
 }
 </style>

@@ -2,8 +2,8 @@
 	<view>
 		<view class="content">
 			<view class="topSelect">
-				<uni-search-bar class="topSearch" @confirm="search" :focus="true" v-model="searchValue" @input="input" @cancel="cancel"
-					@clear="clear">
+				<uni-search-bar class="topSearch" @confirm="search" :focus="true" v-model="searchValue" @input="input"
+					@cancel="cancel" @clear="clear">
 				</uni-search-bar>
 				<button class="topBtn" @click="showPopView">筛选</button>
 			</view>
@@ -12,26 +12,27 @@
 		</view>
 		<uni-section title="我的曾经" type="line">
 			<view v-for="item in list">
-						<uni-swipe-action>
+				<uni-swipe-action>
 
-				<uni-swipe-action-item @click="bindClick">
-								<view class="content-box">
-									<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
-										@click="onClick(item)">
-										<view class="uni-list">
-											<text class="uni-body">次数:{{ item.times }}次</text>
-											<view>
-												<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
-												<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
-											</view>
-										</view>
-									</uni-card>
+					<uni-swipe-action-item @click="bindClick">
+						<view class="content-box">
+							<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
+								@click="onClick(item)">
+								<view class="uni-list">
+									<text class="uni-body">次数:{{ item.times }}次</text>
+									<view>
+										<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
+										<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
+									</view>
 								</view>
-								<template v-slot:right>
-									<view class="slot-button" @click="bindClick(item)"><text class="slot-button-text">删除</text></view>
-								</template>
-							</uni-swipe-action-item>
-						</uni-swipe-action>
+							</uni-card>
+						</view>
+						<template v-slot:right>
+							<view class="slot-button" @click="bindClick(item)"><text class="slot-button-text">删除</text>
+							</view>
+						</template>
+					</uni-swipe-action-item>
+				</uni-swipe-action>
 
 			</view>
 			<view v-show="showOther">
@@ -83,21 +84,21 @@ export default {
 			//筛选表单数据
 			filterData: [{
 				options1: [{
-									text: '取消置顶'
-								}],
-								options2: [{
-										text: '取消',
-										style: {
-											backgroundColor: '#007aff'
-										}
-									},
-									{
-										text: '确认',
-										style: {
-											backgroundColor: '#F56C6C'
-										}
-									}
-								],
+					text: '取消置顶'
+				}],
+				options2: [{
+					text: '取消',
+					style: {
+						backgroundColor: '#007aff'
+					}
+				},
+				{
+					text: '确认',
+					style: {
+						backgroundColor: '#F56C6C'
+					}
+				}
+				],
 				children: false, //是否有子项
 				title: "哪餐",
 				key: "whichTime", //键名 接收对象名字
@@ -199,7 +200,7 @@ export default {
 		// console.log(sessionStorage.getItem('user'))
 	},
 	onShow() {
-		if(!uni.getStorageSync('token')) {
+		if (!uni.getStorageSync('token')) {
 			this.list = [];
 		}
 		this.init();
@@ -358,8 +359,11 @@ export default {
 		onClick(e) {
 			console.log(e)
 			let url = '/pages/tabbar/tabbar-4/tabbar-4'
-			console.log(this.$navTo)
-			this.$navTo.togo(url, e)
+			console.log(e)
+			uni.navigateTo({  
+				url: `${url}?_id=${e._id}&food=${e.food}&times=${e.times}&love=${e.love}&user=${e.user}&whichTime=${e.whichTime}`
+			}) 
+			// this.$navTo.togo(url, e)
 		},
 		jumpSign(e, item) {
 			console.log(item)
@@ -605,67 +609,70 @@ export default {
 	justify-content: start;
 	margin: 10upx 20upx 0upx;
 }
+
 .topSearch {
 	width: 70%;
 }
+
 .content-box {
-		flex: 1;
-		/* #ifdef APP-NVUE */
-		justify-content: center;
-		/* #endif */
-		// height: 44px;
-		// line-height: 44px;
-		position: relative;
-		background-color: #fff;
-		border-bottom-color: #f5f5f5;
-		border-bottom-width: 1px;
-		border-bottom-style: solid;
-	}
+	flex: 1;
+	/* #ifdef APP-NVUE */
+	justify-content: center;
+	/* #endif */
+	// height: 44px;
+	// line-height: 44px;
+	position: relative;
+	background-color: #fff;
+	border-bottom-color: #f5f5f5;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
 
-	.content-text {
-		font-size: 15px;
-	}
+.content-text {
+	font-size: 15px;
+}
 
-	.example-body {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: row;
-		justify-content: center;
-		padding: 10px 0;
-		background-color: #fff;
-	}
+.example-body {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: row;
+	justify-content: center;
+	padding: 10px 0;
+	background-color: #fff;
+}
 
-	.button {
-		border-color: #e5e5e5;
-		border-style: solid;
-		border-width: 1px;
-		padding: 4px 8px;
-		border-radius: 4px;
-	}
+.button {
+	border-color: #e5e5e5;
+	border-style: solid;
+	border-width: 1px;
+	padding: 4px 8px;
+	border-radius: 4px;
+}
 
-	.button-text {
-		font-size: 15px;
-	}
+.button-text {
+	font-size: 15px;
+}
 
-	.slot-button {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		height: 100%;
-		/* #endif */
-		flex: 1;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		padding: 0 20px;
-		background-color: #ff5a5f;
-	}
+.slot-button {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	height: 100%;
+	/* #endif */
+	flex: 1;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 0 20px;
+	background-color: #ff5a5f;
+}
 
-	.slot-button-text {
-		color: #ffffff;
-		font-size: 14px;
-	}
-	/deep/ .button-group--right[data-v-22750408] {
-		margin: 30upx 0upx;
-	}
+.slot-button-text {
+	color: #ffffff;
+	font-size: 14px;
+}
+
+/deep/ .button-group--right[data-v-22750408] {
+	margin: 30upx 0upx;
+}
 </style>
