@@ -1,13 +1,13 @@
 import App from './App.vue'
-import axios from 'axios'
-import Qs from 'qs'
+// import axios from 'axios'
+// import Qs from 'qs'
 import * as navTo from '@/utils/navTo.js'
 
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
-Vue.prototype.axios = axios
-Vue.prototype.qs = Qs
+// Vue.prototype.axios = axios
+// Vue.prototype.qs = Qs
 Vue.prototype.$navTo = navTo
 	
 App.mpType = 'app'

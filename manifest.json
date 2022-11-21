@@ -38,6 +38,14 @@
             },
             "sdkConfigs" : {
                 "ad" : {}
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "/Users/macbook/Downloads/project/pic.png",
+                    "xhdpi" : "/Users/macbook/Downloads/project/pic.png",
+                    "xxhdpi" : "/Users/macbook/Downloads/project/pic.png",
+                    "xxxhdpi" : "/Users/macbook/Downloads/project/pic.png"
+                }
             }
         }
     },

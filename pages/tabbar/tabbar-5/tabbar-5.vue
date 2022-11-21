@@ -45,7 +45,7 @@
 				</view>
 			</view>
 		</view>
-		<view v-if="log" >
+		<view v-if="log">
 			<view class="login">您好，{{ user }}</view>
 			<view class="logout">
 				<button class="logout-btn" type="primary" @click="logout">退出登录</button>
@@ -55,179 +55,252 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				login: true,
-				register: false,
-				user: sessionStorage.getItem('user'),
-				// 校验表单数据
-				valiFormData: {
-					username: '',
-					password: '',
+export default {
+	data() {
+		return {
+			login: true,
+			register: false,
+			user: uni.getStorageSync("user"),
+			// 校验表单数据
+			valiFormData: {
+				username: '',
+				password: '',
+			},
+			// 校验规则
+			rules: {
+				username: {
+					rules: [{
+						required: true,
+						errorMessage: '姓名不能为空'
+					}]
 				},
-				// 校验规则
-				rules: {
-					username: {
-						rules: [{
-							required: true,
-							errorMessage: '姓名不能为空'
-						}]
-					},
-					password: {
-						rules: [{
-							required: true,
-							errorMessage: '密码不能为空'
-							// }, {
-							// 	format: 'number',
-							// 	errorMessage: '年龄只能输入数字'
-							// }]
-						}]
-					}
-				},
-			}
-		},
-		computed: {
-			log() {
-				return !this.login && !this.register
-			}
-		},
-		onLoad() {
-			if(sessionStorage.getItem('user') && sessionStorage.getItem('token')) {
-				this.login = false;
-			}
-		},
-		onReady() {},
-		methods: {
-			submit(ref) {
-				if(this.login) {
-					this.$refs[ref].validate().then(result => {
-						this.axios.post('/api/login', this.qs.stringify(result), {
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded'
-								}
-							})
-							.then(function(res) {
-								console.log(res.data)
-								if (res?.data?.code !== 0 && res?.data) {
-								  uni.showToast({
-								  	title: `${res?.data?.message}`,
-									icon: 'error'
-								  })
-								} else {
-									sessionStorage.setItem('token', res?.data?.data?.token);
-									sessionStorage.setItem('user', result?.username);
-									this.user = result?.username;
-									uni.showToast({
-										title: `登录成功`
-									})
-									this.login = false;
-									this.valiFormData = {
-										username: '',
-										password: '',
-									};
-								}
-								//控制台打印请求成功时返回的数据
-								//bind(this)可以不用
-							}.bind(this))
-							.catch(function(err) {
-								if (err.response) {
-									console.log(err.response)
-									//控制台打印错误返回的内容
-								}
-								//bind(this)可以不用
-							}.bind(this))
-					}).catch(err => {
-						console.log('err', err);
-					})
-				}
-				if(this.register) {
-					this.$refs[ref].validate().then(result => {
-						this.axios.post('/api/registry', this.qs.stringify(result), {
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded'
-								}
-							})
-							.then(function(res) {
-								console.log(res.data)
-								if (res?.data?.code !== 0 && res?.data) {
-								  uni.showToast({
-								  	title: `${res?.data?.data}`,
-									icon: 'error'
-								  })
-								} else {
-									uni.showToast({
-										title: `注册成功`
-									})
-									this.valiFormData = {
-										username: '',
-										password: '',
-									};
-									this.register = false;
-									this.login = true;
-								}
-								//控制台打印请求成功时返回的数据
-								//bind(this)可以不用
-							}.bind(this))
-							.catch(function(err) {
-								if (err.response) {
-									console.log(err.response)
-									//控制台打印错误返回的内容
-								}
-								//bind(this)可以不用
-							}.bind(this))
-					}).catch(err => {
-						console.log('err', err);
-					})
+				password: {
+					rules: [{
+						required: true,
+						errorMessage: '密码不能为空'
+						// }, {
+						// 	format: 'number',
+						// 	errorMessage: '年龄只能输入数字'
+						// }]
+					}]
 				}
 			},
-			logout() {
-				sessionStorage.clear();
-				this.login = true;
-			},
-			registerJump() {
-				this.register = true;
-				this.login = false;
-			},
-			loginJump() {
-				this.register = false;
-				this.login = true;
+		}
+	},
+	computed: {
+		log() {
+			return !this.login && !this.register
+		}
+	},
+	onLoad() {
+		if (uni.getStorageSync("user") && uni.getStorageSync("token")) {
+			this.login = false;
+		}
+	},
+	onReady() { },
+	methods: {
+		submit(ref) {
+			if (this.login) {
+				this.$refs[ref].validate().then(result => {
+					// this.axios.post('/api/login', this.qs.stringify(result), {
+					// 	headers: {
+					// 		'Content-Type': 'application/x-www-form-urlencoded'
+					// 	}
+					// })
+					// 	.then(function (res) {
+					// 		console.log(res.data)
+					// 		if (res?.data?.code !== 0 && res?.data) {
+					// 			uni.showToast({
+					// 				title: `${res?.data?.message}`,
+					// 				icon: 'error'
+					// 			})
+					// 		} else {
+					// 			uni.setStorageSync('token', res?.data?.data?.token);
+					// 			uni.setStorageSync('user', result?.username);
+					// 			this.user = result?.username;
+					// 			uni.showToast({
+					// 				title: `登录成功`
+					// 			})
+					// 			this.login = false;
+					// 			this.valiFormData = {
+					// 				username: '',
+					// 				password: '',
+					// 			};
+					// 		}
+					// 		//控制台打印请求成功时返回的数据
+					// 		//bind(this)可以不用
+					// 	}.bind(this))
+					// 	.catch(function (err) {
+					// 		if (err.response) {
+					// 			console.log(err.response)
+					// 			//控制台打印错误返回的内容
+					// 		}
+					// 		//bind(this)可以不用
+					// 	}.bind(this))
+					uni.request({
+						url: "http://43.143.38.230:7001/login",
+						method: 'POST',
+						data: result,
+						header: {
+							"Content-Type": "application/x-www-form-urlencoded",
+						},
+						success: (res) => {
+							console.log(res)
+							if (res?.data?.code !== 0 && res?.data) {
+								uni.showToast({
+									title: `${res?.data?.message}`,
+									icon: 'none'
+								})
+							} else {
+								uni.setStorageSync('token', res?.data?.data?.token);
+								uni.setStorageSync('user', result?.username);
+								this.user = result?.username;
+								uni.showToast({
+									title: `登录成功`
+								})
+								this.login = false;
+								this.valiFormData = {
+									username: '',
+									password: '',
+								};
+							}
+						},
+						fall: e => {
+							console.log(e)
+						}
+					})
+				}).catch(err => {
+					console.log('err', err);
+				})
 			}
-			
+			if (this.register) {
+				this.$refs[ref].validate().then(result => {
+					// this.axios.post('/api/registry', this.qs.stringify(result), {
+					// 	headers: {
+					// 		'Content-Type': 'application/x-www-form-urlencoded'
+					// 	}
+					// })
+					// 	.then(function (res) {
+					// 		console.log(res.data)
+					// 		if (res?.data?.code !== 0 && res?.data) {
+					// 			uni.showToast({
+					// 				title: `${res?.data?.data}`,
+					// 				icon: 'error'
+					// 			})
+					// 		} else {
+					// 			uni.showToast({
+					// 				title: `注册成功`
+					// 			})
+					// 			this.valiFormData = {
+					// 				username: '',
+					// 				password: '',
+					// 			};
+					// 			this.register = false;
+					// 			this.login = true;
+					// 		}
+					// 		//控制台打印请求成功时返回的数据
+					// 		//bind(this)可以不用
+					// 	}.bind(this))
+					// 	.catch(function (err) {
+					// 		if (err.response) {
+					// 			console.log(err.response)
+					// 			//控制台打印错误返回的内容
+					// 		}
+					// 		//bind(this)可以不用
+					// 	}.bind(this))
+
+
+					uni.request({
+						url: "http://43.143.38.230:7001/registry",
+						method: 'POST',
+						data: result,
+						header: {
+							"Content-Type": "application/x-www-form-urlencoded",
+						},
+						success: (res) => {
+							console.log(res)
+							if (res?.data?.code !== 0 && res?.data) {
+								uni.showToast({
+									title: `${res?.data?.data}`,
+									icon: 'none'
+								})
+							} else {
+								uni.showToast({
+									title: `注册成功`
+								})
+								this.valiFormData = {
+									username: '',
+									password: '',
+								};
+								this.register = false;
+								this.login = true;
+							}
+						},
+						fall: e => {
+							console.log(e)
+						}
+					})
+				}).catch(err => {
+					console.log('err', err);
+				})
+			}
 		},
-	}
+		logout() {
+			// uni.Stro
+			// sessionStorage.clear();
+			uni.setStorageSync("user", undefined);
+			uni.setStorageSync("token", undefined);
+			this.login = true;
+		},
+		registerJump() {
+			this.register = true;
+			this.login = false;
+		},
+		loginJump() {
+			this.register = false;
+			this.login = true;
+		}
+
+	},
+}
 </script>
 
 <style lang="less">
-	.example {
+.example {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.login {
+	font-size: 40upx;
+	text-align: center;
+	margin: 40upx;
+}
+
+.logout {
+	position: fixed;
+	bottom: 200upx;
+	width: 100%;
+	padding: 0;
+
+	.logout-btn {
 		width: 80%;
-		margin: 0 auto;
 	}
-	.login {
-		font-size: 40upx;
-		text-align: center;
-		margin: 40upx;
-	}
-	.logout {
-		position: fixed;
-		bottom: 200upx;
-		width: 100%;
-		padding: 0;
-		.logout-btn {			
-			width: 80%;
-		}
-	}
-	.register-btn {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;	
-		margin: 30upx;
-	}
-	.register-text {
-		font-size: 40upx;
-	}
-	.register-vbtn {
-		font-size: 40upx;
-		color: blueviolet;
-	}
+}
+
+.register-btn {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 30upx;
+}
+
+.register-text {
+	font-size: 40upx;
+}
+
+.register-vbtn {
+	font-size: 40upx;
+	color: blueviolet;
+}
 </style>
