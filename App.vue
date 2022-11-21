@@ -2,7 +2,9 @@
 export default {
 	globalData: {
 		    token: '',
-			user: ''
+			user: '',
+			host: 'http://43.143.38.230:7001',
+			// host: '/api',
 	},
 	onLaunch: function() {
 		console.log('App Launch');

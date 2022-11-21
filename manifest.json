@@ -8,6 +8,20 @@
     "compatConfig" : {
         "MODE" : 2
     },
+    "h5" : {
+        "devServer" : {
+            "proxy" : {
+                //配置代理服务器来解决跨域问题，uniapp不适用CORS方案和设置JSONP方案
+                "/api/" : {
+                    //映射域名
+                    "target" : "http://43.143.38.230:7001",
+                    "pathRewrite" : {
+                        "^/api" : ""
+                    }
+                }
+            }
+        }
+    },
     "app-plus" : {
         "usingComponents" : true,
         "compilerVersion" : 3,

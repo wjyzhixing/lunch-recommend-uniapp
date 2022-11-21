@@ -159,9 +159,9 @@ export default {
 			// 		}
 			// 		//bind(this)可以不用
 			// 	}.bind(this))
-
+			const host = getApp().globalData.host;
 			uni.request({
-				url: "http://43.143.38.230:7001/updateMyWifeFood",
+				url: host + "/updateMyWifeFood",
 				method: 'POST',
 				data: data,
 				header: {
@@ -218,9 +218,9 @@ export default {
 			// 		}
 			// 		//bind(this)可以不用
 			// 	}.bind(this))
-
+			const host = getApp().globalData.host;
 			uni.request({
-				url: "http://43.143.38.230:7001/addMyWifeFood",
+				url: host + "/addMyWifeFood",
 				method: 'POST',
 				data: data,
 				header: {

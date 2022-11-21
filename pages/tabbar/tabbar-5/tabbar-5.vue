@@ -137,8 +137,9 @@ export default {
 					// 		}
 					// 		//bind(this)可以不用
 					// 	}.bind(this))
+					const host = getApp().globalData.host;
 					uni.request({
-						url: "http://43.143.38.230:7001/login",
+						url: host + "/login",
 						method: 'POST',
 						data: result,
 						header: {
@@ -209,9 +210,9 @@ export default {
 					// 		//bind(this)可以不用
 					// 	}.bind(this))
 
-
+					const host = getApp().globalData.host;
 					uni.request({
-						url: "http://43.143.38.230:7001/registry",
+						url: host + "/registry",
 						method: 'POST',
 						data: result,
 						header: {

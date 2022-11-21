@@ -12,16 +12,27 @@
 		</view>
 		<uni-section title="我的曾经" type="line">
 			<view v-for="item in list">
-				<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
-					@click="onClick(item)">
-					<view class="uni-list">
-						<text class="uni-body">次数:{{ item.times }}次</text>
-						<view>
-							<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
-							<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
-						</view>
-					</view>
-				</uni-card>
+						<uni-swipe-action>
+
+				<uni-swipe-action-item @click="bindClick">
+								<view class="content-box">
+									<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
+										@click="onClick(item)">
+										<view class="uni-list">
+											<text class="uni-body">次数:{{ item.times }}次</text>
+											<view>
+												<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
+												<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
+											</view>
+										</view>
+									</uni-card>
+								</view>
+								<template v-slot:right>
+									<view class="slot-button" @click="bindClick(item)"><text class="slot-button-text">删除</text></view>
+								</template>
+							</uni-swipe-action-item>
+						</uni-swipe-action>
+
 			</view>
 			<view v-show="showOther">
 				<view class="noData">
@@ -71,6 +82,22 @@ export default {
 			searchValue: '',
 			//筛选表单数据
 			filterData: [{
+				options1: [{
+									text: '取消置顶'
+								}],
+								options2: [{
+										text: '取消',
+										style: {
+											backgroundColor: '#007aff'
+										}
+									},
+									{
+										text: '确认',
+										style: {
+											backgroundColor: '#F56C6C'
+										}
+									}
+								],
 				children: false, //是否有子项
 				title: "哪餐",
 				key: "whichTime", //键名 接收对象名字
@@ -253,9 +280,9 @@ export default {
 			// 		}
 			// 		//bind(this)可以不用
 			// 	}.bind(this))
-
+			const host = getApp().globalData.host;
 			uni.request({
-				url: "http://43.143.38.230:7001/getMyWifeFood",
+				url: host + "/getMyWifeFood",
 				method: 'POST',
 				data: result,
 				header: {
@@ -387,9 +414,9 @@ export default {
 				// 		}
 				// 		//bind(this)可以不用
 				// 	}.bind(this))
-
+				const host = getApp().globalData.host;
 				uni.request({
-					url: "http://43.143.38.230:7001/addTagIfExpensive",
+					url: host + "/addTagIfExpensive",
 					method: 'POST',
 					data: data,
 					header: {
@@ -451,9 +478,9 @@ export default {
 			// 		}
 			// 		//bind(this)可以不用
 			// 	}.bind(this))
-
+			const host = getApp().globalData.host;
 			uni.request({
-				url: "http://43.143.38.230:7001/deleteTag",
+				url: host + "/deleteTag",
 				method: 'POST',
 				data: { id: item._id },
 				header: {
@@ -477,9 +504,46 @@ export default {
 				fall: err => {
 
 				}
+			})
+		},
+		bindClick(e) {
+			console.log(e);
+			const host = getApp().globalData.host;
+			uni.request({
+				url: host + "/deleteMyWifeFood",
+				method: 'POST',
+				data: {
+					id: e._id,
+					username: e.user
+				},
+				header: {
+					'token': uni.getStorageSync("token")
+				},
+				success: (res) => {
+					if (res?.data?.code !== 0 && res?.data) {
+						uni.showToast({
+							title: `${res?.data?.message}`,
+							icon: 'none'
+						})
+					} else {
+						uni.showToast({
+							title: '删除成功',
+						})
+						setTimeout(() => {
+							this.init()
+						}, 1000)
+					}
+				},
+				fall: err => {
+
+				}
 
 			})
-		}
+			// uni.showToast({
+			// 	title: `点击了${e.position === 'left' ? '左侧' : '右侧'} ${e.content.text}按钮`,
+			// 	icon: 'none'
+			// });
+		},
 	},
 	// app端拦截返回事件 ，仅app端生效
 	onBackPress() {
@@ -544,4 +608,64 @@ export default {
 .topSearch {
 	width: 70%;
 }
+.content-box {
+		flex: 1;
+		/* #ifdef APP-NVUE */
+		justify-content: center;
+		/* #endif */
+		// height: 44px;
+		// line-height: 44px;
+		position: relative;
+		background-color: #fff;
+		border-bottom-color: #f5f5f5;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+	}
+
+	.content-text {
+		font-size: 15px;
+	}
+
+	.example-body {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: center;
+		padding: 10px 0;
+		background-color: #fff;
+	}
+
+	.button {
+		border-color: #e5e5e5;
+		border-style: solid;
+		border-width: 1px;
+		padding: 4px 8px;
+		border-radius: 4px;
+	}
+
+	.button-text {
+		font-size: 15px;
+	}
+
+	.slot-button {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		height: 100%;
+		/* #endif */
+		flex: 1;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		padding: 0 20px;
+		background-color: #ff5a5f;
+	}
+
+	.slot-button-text {
+		color: #ffffff;
+		font-size: 14px;
+	}
+	/deep/ .button-group--right[data-v-22750408] {
+		margin: 30upx 0upx;
+	}
 </style>
