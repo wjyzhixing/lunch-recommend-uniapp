@@ -28,6 +28,12 @@ https://github.com/wjyzhixing/lunch-recommend/
 
 ![image](https://user-images.githubusercontent.com/36620969/199630828-4f7aaa13-f003-4520-971c-b92c7764d9fd.png)
 
+## 移动端展示
+![image](https://user-images.githubusercontent.com/36620969/202955111-b8356e6d-985b-41f7-95ce-c1dbbec0e05a.png)
+![image](https://user-images.githubusercontent.com/36620969/202955134-9d3e0604-0628-4768-9f82-445757f2ff82.png)
+![image](https://user-images.githubusercontent.com/36620969/202955160-7610869c-8108-42d0-9205-1791403dc275.png)
+![image](https://user-images.githubusercontent.com/36620969/202955177-f2c8377a-5979-40f1-974d-41813a50d6e5.png)
+
 
 ## 启动与打包
 
