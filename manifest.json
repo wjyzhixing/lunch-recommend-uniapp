@@ -2,7 +2,7 @@
     "name" : "今天吃什么",
     "appid" : "__UNI__4BCB1A6",
     "description" : "",
-    "versionName" : "1.0.2",
+    "versionName" : "1.0.4",
     "versionCode" : "100",
     "transformPx" : false,
     "compatConfig" : {
@@ -75,7 +75,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "wx69484c320aab6cc7",
+        "appid" : "",
         "setting" : {
             "urlCheck" : true
         },

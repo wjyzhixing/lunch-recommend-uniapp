@@ -16,13 +16,16 @@
 
 					<uni-swipe-action-item @click="bindClick">
 						<view class="content-box">
-							<uni-card :title="item.food" :sub-title="item.whichTime" :extra="item.ifExpensive"
+							<uni-card :title="item.food" :sub-title="item.whichTime" :extra="`次数:${item.times}次`"
 								@click="onClick(item)">
 								<view class="uni-list">
-									<text class="uni-body">次数:{{ item.times }}次</text>
+									<!-- <text>{{item.ifExpensive}}</text> -->
 									<view>
 										<text class="uni-sign" @click.stop="jumpSign('showRight', item)">打标签</text>
-										<text class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
+										<text v-if="item.ifExpensive" class="uni-delSign" @click.stop="deleteSign(item)">删除标签</text>
+									</view>
+									<view class="uni-body">
+										<uni-tag type="success" :text="item.ifExpensive"></uni-tag>
 									</view>
 								</view>
 							</uni-card>
