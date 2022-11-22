@@ -46,7 +46,21 @@
 			</view>
 		</view>
 		<view v-if="log">
-			<view class="login">您好，{{ user }}</view>
+			<view class="login2">
+				<view>您好，{{ user }}</view>
+				<view>
+					<view>
+						<image @click="jumpChange" class="box-image" style="height:30upx"
+							src="../../../static/img/setting.png" mode="aspectFit"></image>
+						<image @click="logout" class="box-image" style="height:30upx" src="../../../static/img/logout.png"
+							mode="aspectFit"></image>
+					</view>
+				</view>
+			</view>
+			<view class="my-all">食品排名Top5</view>
+			<view class="todayCar2">
+				<qiun-data-charts class="charts" type="column" :opts="opts2" :chartData="chartData2" />
+			</view>
 			<view class="my-all">整体展示</view>
 			<view class="my-all">
 				<uni-tag class="my-tag" text="早餐" type="primary" @click="bkfilter('早餐')" />
@@ -57,12 +71,13 @@
 			<view class="todayCar">
 				<qiun-data-charts class="charts" type="pie" :opts="opts" :chartData="chartData" />
 			</view>
+			<view class="recommend-btn">
+				<view class="recommend-text">推荐不合理？</view>
+				<view class="recommend-vbtn" @click="random">试试随机一个！</view>
+			</view>
 			<!-- <view>
 				<button @click="share">点我微信分享</button>
 			</view> -->
-			<view class="logout">
-				<button class="logout-btn" type="primary" @click="logout">退出登录</button>
-			</view>
 		</view>
 	</view>
 </template>
@@ -130,6 +145,38 @@ export default {
 				},
 			},
 			chartData: {},
+			opts2: {
+				color: ["#FAC858", "#EE6666", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				padding: [15, 15, 0, 5],
+				legend: {},
+				xAxis: {
+					disableGrid: true
+				},
+				yAxis: {
+					data: [
+						{
+							min: 0
+						}
+					]
+				},
+				extra: {
+					column: {
+						type: "group",
+						width: 30,
+						activeBgColor: "#000000",
+						activeBgOpacity: 0.08,
+						linearType: "custom",
+						seriesGap: 5,
+						linearOpacity: 0.5,
+						barBorderCircle: true,
+						customColor: [
+							"#FA7D8D",
+							"#EB88E2"
+						]
+					}
+				}
+			},
+			chartData2: {},
 		}
 	},
 	computed: {
@@ -209,6 +256,7 @@ export default {
 							} else {
 								uni.setStorageSync('token', res?.data?.data?.token);
 								uni.setStorageSync('user', result?.username);
+								uni.setStorageSync('id', res?.data?.data?.id)
 								this.user = result?.username;
 								this.getServerData(result?.username);
 								uni.showToast({
@@ -305,6 +353,7 @@ export default {
 			// uni.Stro
 			// sessionStorage.clear();
 			this.chartData = {};
+			this.chartData2 = {};
 			uni.setStorageSync("user", undefined);
 			uni.setStorageSync("token", undefined);
 			this.login = true;
@@ -390,6 +439,17 @@ export default {
 						}
 						console.log(chart)
 						this.chartData = JSON.parse(JSON.stringify(chart));
+						const tp2 = temp.sort((a, b) => b.value - a.value).slice(0, 5)
+						let res2 = {
+							categories: tp2.map(i => i.name),
+							series: [
+								{
+									name: "次数",
+									data: tp2.map(i => i.value)
+								}
+							]
+						};
+						this.chartData2 = JSON.parse(JSON.stringify(res2));
 					}
 				},
 				fall: err => {
@@ -421,6 +481,23 @@ export default {
 					// 此处是调起微信分享失败的回调
 				}
 			});
+		},
+		jumpChange() {
+			uni.navigateTo({
+				url: '/pages/tabbar/tabbar-3/tabbar-3'
+			})
+		},
+		random() {
+			console.log(this.list)
+			const result = this.list[this.rand(0, this.list.length || 0) || 0].food;
+			console.log(result)
+			uni.showToast({
+				title: `今天推荐吃${result || '鸡腿'}！`,
+				icon: 'none'
+			})
+		},
+		rand(min, max) {
+			return Math.floor(Math.random() * (max - min)) + min;
 		}
 	},
 }
@@ -434,8 +511,22 @@ export default {
 
 .login {
 	font-size: 40upx;
+	justify-content: space-between;
 	text-align: center;
 	margin: 40upx;
+}
+
+.login2 {
+	font-size: 40upx;
+	justify-content: space-between;
+	// text-align: center;
+	margin: 40upx 40upx 20upx 20upx;
+	display: flex;
+	align-items: center;
+
+	.box-image {
+		width: 40upx;
+	}
 }
 
 .logout {
@@ -476,5 +567,26 @@ export default {
 
 .todayCar {
 	height: 600upx;
+}
+
+.todayCar2 {
+	height: 400upx;
+}
+
+.recommend-btn {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	margin: 0upx 30upx 150upx;
+}
+
+.recommend-text {
+	font-size: 30upx;
+	margin-right: 30upx;
+}
+
+.recommend-vbtn {
+	font-size: 30upx;
+	color: blueviolet;
 }
 </style>
