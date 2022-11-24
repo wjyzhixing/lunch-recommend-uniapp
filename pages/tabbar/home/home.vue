@@ -31,7 +31,7 @@ export default {
 				})
 				return;
 			}
-			let url = '/pages/tabbar/tabbar-4/tabbar-4'
+			let url = '/pages/tabbar/food-detail/food-detail'
 			console.log(this.$navTo)
 			this.$navTo.togo(url)
 		},

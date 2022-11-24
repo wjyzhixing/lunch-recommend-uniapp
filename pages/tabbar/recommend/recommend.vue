@@ -361,7 +361,7 @@ export default {
 		},
 		onClick(e) {
 			console.log(e)
-			let url = '/pages/tabbar/tabbar-4/tabbar-4'
+			let url = '/pages/tabbar/food-detail/food-detail'
 			console.log(e)
 			uni.navigateTo({  
 				url: `${url}?_id=${e._id}&food=${e.food}&times=${e.times}&love=${e.love}&user=${e.user}&whichTime=${e.whichTime}`

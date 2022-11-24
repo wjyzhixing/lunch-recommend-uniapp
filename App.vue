@@ -3,8 +3,8 @@ export default {
 	globalData: {
 		    token: '',
 			user: '',
-			host: 'http://43.143.38.230:7001',
-			// host: '/api',
+			// host: 'http://43.143.38.230:7001',
+			host: '/api',
 	},
 	onLaunch: function() {
 		console.log('App Launch');
@@ -14,12 +14,12 @@ export default {
 			// 	index: 1,
 			// 	text: '31'
 			// });
-			uni.showTabBarRedDot({
-				index: 3
-			});
+			// uni.showTabBarRedDot({
+			// 	index: 3
+			// });
 		}, 1000);
 	},
-	onShow: function() {
+	onShow: function() {	
 		console.log('App Show');
 	},
 	onHide: function() {

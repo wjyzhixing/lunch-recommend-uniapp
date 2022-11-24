@@ -2,7 +2,7 @@
     "name" : "今天吃什么",
     "appid" : "__UNI__4BCB1A6",
     "description" : "",
-    "versionName" : "1.0.4",
+    "versionName" : "1.0.3",
     "versionCode" : "100",
     "transformPx" : false,
     "compatConfig" : {
@@ -19,7 +19,8 @@
                         "^/api" : ""
                     }
                 }
-            }
+            },
+            "https" : true
         }
     },
     "app-plus" : {

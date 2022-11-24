@@ -484,7 +484,7 @@ export default {
 		},
 		jumpChange() {
 			uni.navigateTo({
-				url: '/pages/tabbar/tabbar-3/tabbar-3'
+				url: '/pages/tabbar/personInfo-change/personInfo-change'
 			})
 		},
 		random() {

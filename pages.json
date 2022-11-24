@@ -9,37 +9,29 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/tabbar/tabbar-1/tabbar-1",
+			"path": "pages/tabbar/home/home",
 			"style": {
 				"navigationBarTitleText": "今天吃什么？"
 			}
 		},
 		{
-			"path": "pages/tabbar/tabbar-2/tabbar-2",
+			"path": "pages/tabbar/recommend/recommend",
 			"style": {}
 		},
 		{
-			"path": "pages/tabbar/tabbar-3/tabbar-3",
+			"path": "pages/tabbar/personInfo-change/personInfo-change",
 			"style": {}
 		},
 		{
-			"path": "pages/tabbar/tabbar-4/tabbar-4",
+			"path": "pages/tabbar/food-detail/food-detail",
 			"style": {}
 		},
 		{
-			"path": "pages/tabbar/tabbar-5/tabbar-5",
+			"path": "pages/tabbar/my/my",
 			"style": {}
 		},
 		{
-			"path": "pages/tabbar-3-detial/tabbar-3-release/tabbar-3-release",
-			"style": {}
-		},
-		{
-			"path": "pages/tabbar-3-detial/tabbar-3-video/tabbar-3-video",
-			"style": {}
-		},
-		{
-			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
+			"path": "pages/tabbar/random/random",
 			"style": {}
 		}
 	],
@@ -55,19 +47,19 @@
 		"color": "#8F8F94",
 		"selectedColor": "#f33e54",
 		"list": [{
-				"pagePath": "pages/tabbar/tabbar-1/tabbar-1",
+				"pagePath": "pages/tabbar/home/home",
 				"iconPath": "static/img/tabbar/home.png",
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/tabbar/tabbar-2/tabbar-2",
+				"pagePath": "pages/tabbar/recommend/recommend",
 				"iconPath": "static/img/tabbar/guanzhu.png",
 				"selectedIconPath": "static/img/tabbar/guanzhuactive.png",
 				"text": "推荐"
 			},
 			{
-				"pagePath": "pages/tabbar/tabbar-5/tabbar-5",
+				"pagePath": "pages/tabbar/my/my",
 				"iconPath": "static/img/tabbar/me.png",
 				"selectedIconPath": "static/img/tabbar/meactive.png",
 				"text": "我"
