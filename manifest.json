@@ -1,86 +1,83 @@
 {
-    "name" : "今天吃什么",
-    "appid" : "__UNI__4BCB1A6",
-    "description" : "",
-    "versionName" : "1.0.3",
-    "versionCode" : "100",
-    "transformPx" : false,
-    "compatConfig" : {
-        "MODE" : 2
-    },
-    "h5" : {
-        "devServer" : {
-            "proxy" : {
-                //配置代理服务器来解决跨域问题，uniapp不适用CORS方案和设置JSONP方案
-                "/api/" : {
-                    //映射域名
-                    "target" : "http://43.143.38.230:7001",
-                    "pathRewrite" : {
-                        "^/api" : ""
-                    }
-                }
-            },
-            "https" : true
+  "name": "今天吃什么",
+  "appid": "__UNI__4BCB1A6",
+  "description": "",
+  "versionName": "1.1.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "compatConfig": {
+    "MODE": 2
+  },
+  "h5": {
+    "devServer": {
+      "proxy": {
+        //配置代理服务器来解决跨域问题，uniapp不适用CORS方案和设置JSONP方案
+        "/api/": {
+          //映射域名
+          "target": "http://43.143.38.230:7001",
+          "pathRewrite": {
+            "^/api": ""
+          }
         }
-    },
-    "app-plus" : {
-        "usingComponents" : true,
-        "compilerVersion" : 3,
-        "modules" : {
-            "Share" : {}
+      },
+      "https": true
+    }
+  },
+  "app-plus": {
+    "usingComponents": true,
+    "compilerVersion": 3,
+    "modules": {},
+    "distribute": {
+      "android": {
+        "permissions": [
+          "<uses-feature android:name=\"android.hardware.camera\"/>",
+          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+          "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+          "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+          "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+        ],
+        "abiFilters": ["armeabi-v7a", "arm64-v8a", "x86"]
+      },
+      "ios": {
+        "dSYMs": false
+      },
+      "sdkConfigs": {
+        "ad": {},
+        "share": {
+          "weixin": {
+            "appid": "wx69484c320aab6cc7",
+            "UniversalLinks": ""
+          }
         },
-        "distribute" : {
-            "android" : {
-                "permissions" : [
-                    "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
-                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ],
-                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
-            },
-            "ios" : {
-                "dSYMs" : false
-            },
-            "sdkConfigs" : {
-                "ad" : {},
-                "share" : {
-                    "weixin" : {
-                        "appid" : "wx69484c320aab6cc7",
-                        "UniversalLinks" : ""
-                    }
-                },
-                "payment" : {}
-            },
-            "icons" : {
-                "android" : {
-                    "hdpi" : "/Users/macbook/Downloads/project/pic.png",
-                    "xhdpi" : "/Users/macbook/Downloads/project/pic.png",
-                    "xxhdpi" : "/Users/macbook/Downloads/project/pic.png",
-                    "xxxhdpi" : "/Users/macbook/Downloads/project/pic.png"
-                }
-            }
+        "payment": {}
+      },
+      "icons": {
+        "android": {
+          "hdpi": "/Users/macbook/Downloads/project/pic.png",
+          "xhdpi": "/Users/macbook/Downloads/project/pic.png",
+          "xxhdpi": "/Users/macbook/Downloads/project/pic.png",
+          "xxxhdpi": "/Users/macbook/Downloads/project/pic.png"
         }
+      }
+    }
+  },
+  "quickapp": {},
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": true
     },
-    "quickapp" : {},
-    "mp-weixin" : {
-        "appid" : "",
-        "setting" : {
-            "urlCheck" : true
-        },
-        "usingComponents" : true
-    },
-    "vueVersion" : "2"
+    "usingComponents": true
+  },
+  "vueVersion": "2"
 }

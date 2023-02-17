@@ -8,11 +8,11 @@
 			<view class="content">
 				今天吃什么？
 			</view>
-		</view class="btn-list">
+		</view>
 		<button class="btn" @click="onRandom()">推荐一个</button>
 		<button class="btn" @click="onAdd()" type="primary">新增一个</button>
 	</view>
-</template>
+</template> 
 
 <script>
 export default {

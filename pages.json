@@ -33,6 +33,10 @@
 		{
 			"path": "pages/tabbar/random/random",
 			"style": {}
+		},
+		{
+			"path": "pages/tabbar/chat/chat",
+			"style": {}
 		}
 	],
 	"globalStyle": {
@@ -57,6 +61,18 @@
 				"iconPath": "static/img/tabbar/guanzhu.png",
 				"selectedIconPath": "static/img/tabbar/guanzhuactive.png",
 				"text": "推荐"
+			},
+			{
+				"pagePath": "pages/tabbar/random/random",
+				"iconPath": "static/img/tabbar/random.png",
+				"selectedIconPath": "static/img/tabbar/randomactive.png",
+				"text": "随机"
+			},
+			{
+				"pagePath": "pages/tabbar/chat/chat",
+				"iconPath": "static/img/tabbar/chat.png",
+				"selectedIconPath": "static/img/tabbar/chatactive.png",
+				"text": "chatgpt"
 			},
 			{
 				"pagePath": "pages/tabbar/my/my",

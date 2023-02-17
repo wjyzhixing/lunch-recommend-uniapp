@@ -1,16 +1,11 @@
 {
-    "id": "filter-popup",
-    "name": "筛选 菜单 筛选菜单 上拉筛选 ",
-    "version": "1.0.4",
-    "description": "筛选菜单，支持单选和多选 ， 选择后的数据通过.sync双向绑定,全端支持  导入即用",
+    "id": "njl-rotaryTable",
+    "name": "大转盘（mpaas快应用 微信小程序 支付宝小程序）",
+    "version": "1.0.0",
+    "description": "uniapp大转盘组件，根据数组列表长度定义转盘上奖品数量 目前支持4-12的商品  多了或少了 请自己改样式",
     "keywords": [
-        "筛选",
-        "菜单",
-        "筛选菜单",
-        "上拉筛选"
-    ],
-    "dependencies": {
-        "@dcloudio/uni-ui": "^1.4.23",
-        "axios": "^1.1.3"
-    }
+        "uniapp",
+        "转盘",
+        "UI组件"
+    ]
 }
